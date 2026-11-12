@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DownX</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <aside class="sidebar glass">
+      <div class="brand">
+        <div class="logo" data-icon="bolt"></div>
+        <h1>DownX</h1>
+        <p data-i18n="tagline"></p>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="all"><span data-icon="download"></span><span data-i18n="nav_all"></span><b class="badge" id="cnt-all">0</b></button>
+        <button class="nav-item" data-view="torrent"><span data-icon="torrent"></span><span data-i18n="nav_torrent"></span><b class="badge" id="cnt-torrent">0</b></button>
+        <button class="nav-item" data-view="completed"><span data-icon="check"></span><span data-i18n="nav_completed"></span><b class="badge" id="cnt-completed">0</b></button>
+        <button class="nav-item" data-view="queue"><span data-icon="clock"></span><span data-i18n="nav_queue"></span><b class="badge" id="cnt-queue">0</b></button>
+        <button class="nav-item" id="btn-settings"><span data-icon="gear"></span><span data-i18n="nav_settings"></span></button>
+        <button class="nav-item" id="btn-tools"><span data-icon="wrench"></span><span data-i18n="nav_tools"></span></button>
+        <button class="nav-item" id="btn-about"><span data-icon="info"></span><span data-i18n="nav_about"></span></button>
+      </nav>
+
+      <div class="promo">
+        <div class="promo-bolt" data-icon="bolt"></div>
+        <div>
+          <strong data-i18n="ultra"></strong>
+          <small data-i18n="ultra_sub"></small>
+        </div>
+        <span class="pill-brand">DownX</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="search glass">
+          <span data-icon="globe"></span>
+          <input id="url" type="text" autocomplete="off" data-i18n-ph="search" />
+          <button id="add" class="primary" data-i18n="add"></button>
+        </div>
+        <div class="opts">
+          <label class="chk"><input type="checkbox" id="playlist" /> <span data-i18n="playlist"></span></label>
+          <select id="quality"></select>
+          <select id="speed" title="Speed limit"></select>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" id="btn-torrent-file" data-icon="torrent" title="Open .torrent"></button>
+          <button class="icon-btn primary" id="btn-resume-all" data-icon="play" title="Resume all"></button>
+          <button class="icon-btn" id="btn-pause-all" data-icon="pause" title="Pause all"></button>
+          <button class="icon-btn" id="btn-stop-all" data-icon="stop" title="Stop all"></button>
+          <button class="icon-btn" id="btn-clear" data-icon="trash" title="Clear finished"></button>
+        </div>
+      </header>
+
+      <div class="tabs">
+        <button class="tab active" data-view="all"><span data-icon="grid"></span><span data-i18n="tab_all"></span><b id="tab-cnt-all">0</b></button>
+        <button class="tab" data-view="torrent"><span data-icon="torrent"></span><span data-i18n="tab_torrent"></span><b id="tab-cnt-torrent">0</b></button>
+      </div>
+
+      <section class="list glass">
+        <div class="thead">
+          <span data-i18n="col_name"></span>
+          <span data-i18n="col_progress"></span>
+          <span data-i18n="col_speed"></span>
+          <span data-i18n="col_size"></span>
+          <span data-i18n="col_time"></span>
+          <span data-i18n="col_status"></span>
+          <span></span>
+        </div>
+        <div id="rows" class="rows"></div>
+      </section>
+
+      <section class="tpanel glass" id="tpanel">
+        <div class="tp-left">
+          <div class="tp-icon" data-icon="torrent"></div>
+          <h3 data-i18n="torrent_title"></h3>
+          <p data-i18n="torrent_sub"></p>
+          <button id="btn-open-torrent" class="primary wide" data-i18n="open_torrent"></button>
+        </div>
+        <div class="tp-mid">
+          <canvas id="spark"></canvas>
+        </div>
+        <div class="tp-stats">
+          <div><span data-i18n="stat_down"></span><b id="st-down">0 KB/s</b></div>
+          <div><span data-i18n="stat_up"></span><b id="st-up">0 KB/s</b></div>
+          <div><span data-i18n="stat_seeds"></span><b id="st-seeds">0</b></div>
+          <div><span data-i18n="stat_peers"></span><b id="st-peers">0</b></div>
+        </div>
+        <div class="tp-btns">
+          <button id="tp-pause" class="icon-btn" title="Pause"></button>
+          <button id="tp-stop" class="icon-btn" data-icon="stop" title="Stop"></button>
+        </div>
+      </section>
+
+      <footer class="statusbar glass">
+        <span class="down" id="sb-down">↓ 0 KB/s</span>
+        <span class="up" id="sb-up">↑ 0 KB/s</span>
+        <span class="disk" data-icon="disk"></span>
+        <span id="sb-free"></span>
+        <span id="msg" class="msg"></span>
+        <span class="grow"></span>
+        <span class="by">By Hamza</span>
+        <span class="heart" data-icon="heart"></span>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="settings-dialog" class="glass-dialog">
+    <h2 data-i18n="settings_title"></h2>
+    <div class="field">
+      <span data-i18n="folder"></span>
+      <div class="inline">
+        <span id="set-folder" class="muted"></span>
+        <button id="set-pick" class="ghost" data-i18n="change"></button>
+      </div>
+    </div>
+    <div class="field">
+      <span data-i18n="max_concurrent"></span>
+      <select id="set-conc">
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+      </select>
+    </div>
+    <div class="field">
+      <span data-i18n="default_quality"></span>
+      <select id="set-quality"></select>
+    </div>
+    <div class="field">
+      <span data-i18n="lang_label"></span>
+      <button id="set-lang" class="ghost"></button>
+    </div>
+    <div class="field col">
+      <span data-i18n="bridge"></span>
+      <div class="inline wide">
+        <input id="set-token" readonly />
+        <button id="set-copy" class="ghost" data-i18n="copy"></button>
+      </div>
+      <small class="muted" data-i18n="bridge_hint"></small>
+    </div>
+    <p class="muted" data-i18n="settings_note"></p>
+    <div class="dialog-actions">
+      <button id="set-save" class="primary" data-i18n="save"></button>
+    </div>
+  </dialog>
+
+  <dialog id="about-dialog" class="glass-dialog">
+    <h2>DownX</h2>
+    <p data-i18n="about_text"></p>
+    <div class="dialog-actions">
+      <button class="primary" onclick="this.closest('dialog').close()" data-i18n="close"></button>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
